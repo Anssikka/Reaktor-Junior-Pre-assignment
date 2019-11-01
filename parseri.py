@@ -4,28 +4,57 @@ import os
 
 class Package:
     def __init__(self, packageInfo):
+
+        #packageInfo is always on same format so there are two possible choices.
         if len(packageInfo) == 2:
             self.packageName = packageInfo[0].split(": ")[1].split("'")[0]
             self.packageDescription = packageInfo[1].split(": ")[1].split("'")[0]
-            self.packageDepends = None
+            self.packageDependancies = None
         else:
             self.packageName = packageInfo[0].split(": ")[1].split("'")[0]
-            self.packageDepends = packageInfo[1].split(": ")[1]
+            self.packageDependancies = packageInfo[1].split(": ")[1]
             self.packageDescription = packageInfo[2].split(": ")[1].split("'")[0]
+        self.packagesDependant = []
 
-        #format dependencies to more readable format
-        if self.packageDepends:
-            self.packageDepends = self.packageDepends.split(",")
-            for index in range(len(self.packageDepends)):
-                if "(" in self.packageDepends[index]:
-                    self.packageDepends[index] = self.packageDepends[index].split("(")[0]
-                self.packageDepends[index] = self.packageDepends[index].replace("'", "").replace(" ", "").replace("]","")
+        #Make dependancies more readable and strip ' ] and whitespace.
+        if self.packageDependancies:
+            self.packageDependancies = self.packageDependancies.split(",")
+            for index in range(len(self.packageDependancies)):
+                if "(" in self.packageDependancies[index]:
+                    self.packageDependancies[index] = self.packageDependancies[index].split("(")[0]
+                self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace(" ", "").replace("]","")
+
 
 
     def print(self):
-        print("packagename: ",self.packageName," packageDescription: ", self.packageDescription, "PackageDepends: ", self.packageDepends)
+        print("packagename: ",self.packageName,"packageDescription: ", self.packageDescription, "packageDependancies: ", self.packageDependancies, "PackagesDependant: ", self.packagesDependant)
 
-file = open('status.txt', encoding="utf8")
+    def getDependancies(self):
+        return self.packageDependancies
+
+    def findDependants(self, allPackages):
+        for package in allPackages:
+            if package.getDependancies():
+                for dependancy in package.getDependancies():
+                    if self.packageName == dependancy and dependancy not in self.packagesDependant:
+                        self.packagesDependant.append(dependancy)
+
+    def getHref(self):
+        return "<li><a href = ""./Packages/{}.html>""{}</a></li>".format(self.packageName, self.packageName)
+
+    def getDescriptionHeader(self):
+        return "<p>{}</p>".format(self.packageDescription)
+
+    def getDependanciesHrefs(self):
+        Str = ''
+        if self.packageDependancies:
+            for dep in self.packageDependancies:
+                Str += "<a href = ""./Packages/{}.html>""{}</a> \n" .format(dep, dep)
+        return self.packageDependancies
+
+
+
+file = open('status.real', encoding="utf8")
 read_file = reader(file)
 rivit = list(read_file)
 
@@ -56,38 +85,32 @@ while len(siivotut) > 0:
             else:
                 tempList.append(siivotut.pop(0))
 
-#for row in tuplet:
-    #if len(row) == 2:
-        #print(row)
 
-
+#tehdään packageClassit
 paketit = []
 for package in tuplet:
     paketit.append(Package(package))
 
-paketit = paketit[3:12]
-for pakkake in paketit:
-    pakkake.print()
+#haetaan dependantit
+for p in paketit:
+    p.findDependants(paketit)
+
+#printataan
+#paketit = paketit[:15]
+#for pakkake in paketit:
+    #pakkake.print()
 
 
 
-#f = open("index.html", "w+")
-#f.write('<ul>')
+f = open("index.html", "w+")
+f.write('<ul>')
 
-#tuplet = tuplet[:15]
-# Generoidaan indeksi
-# for row in tuplet:
-#     packageName = row[0]
-#     packageName = packageName.split(": ")
-#     nimi = packageName[1].split("'")[0]
-#     str = "<a href = ""./Packages/{}.html>""{}</a>".format(nimi, nimi)
-#     if len(row) == 3:
-#         print(row)
-#
-#     f.write("<li> {} </li> \n".format(str))
-#
-# f.write('</ul>')
-# f.close()
+#Generoidaan indeksi
+for package in paketit:
+    f.write(package.getHref())
+
+f.write('</ul>')
+f.close()
 
 #Generoidaan hakemistot
 # for row in tuplet:
