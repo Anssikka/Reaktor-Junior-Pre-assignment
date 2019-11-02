@@ -1,3 +1,5 @@
 index.html
-\Packages
-status.txt
+Packages/
+*status.txt
+.ipynb_checkpoints
+

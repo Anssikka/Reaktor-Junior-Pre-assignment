@@ -1,5 +1,4 @@
 from csv import reader
-import os
 
 
 class Package:
@@ -120,7 +119,7 @@ for package in paketit:
 f.write('</ul>')
 f.close()
 
-
+#Generoidaan hakemistot
 
 for package in paketit:
     dir = "./Packages/{}.html".format(package.packageName)
@@ -144,28 +143,3 @@ for package in paketit:
     f.write(html)
 
 f.close()
-
-#Generoidaan hakemistot
-# for row in tuplet:
-#     packageName = row[0]
-#     packageName = packageName.split(": ")
-#     nimi = packageName[1].split("'")[0]
-#
-#     dir = "./Packages/{}.html".format(nimi)
-#
-#
-#     f = open(dir, "w+")
-#     html = """
-#           <div>
-#               <H1>{}</H1>
-#               <h3>{}</h3>
-#               <h3></h3>
-#               <ul>
-#                 <li>linkki</li>
-#                 <li>linkki</li>
-#               </ul>
-#           </div>
-#
-#          """.format(nimi, row[1])
-#     f.write(html)
-#     f.close()
