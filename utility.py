@@ -45,12 +45,11 @@ class Util:
     def generateDependants(self):
         for package in self.packages:
             package.findDependants(self.packages)
-            #print(package.getDependancies())
 
 
     def generateIndex(self):
         self.packages.sort(key=lambda x: x.packageName)
-        f = open("index.html", "w+")
+        f = open("./build/index.html", "w+")
         f.write('<ul>')
         for package in self.packages:
             f.write(package.getHref())
@@ -60,7 +59,7 @@ class Util:
 
     def generatePackagesDir(self):
         for package in self.packages:
-            dir = "./Packages/{}.html".format(package.packageName)
+            dir = "./build/Packages/{}.html".format(package.packageName)
             f = open(dir, "w+")
             html = """
             <div>
@@ -79,6 +78,5 @@ class Util:
 
             """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(),
                        package.getDependantHrefs())
-            print(package.getDependants())
             f.write(html)
         f.close()
