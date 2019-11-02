@@ -1,5 +1,5 @@
 from csv import reader
-
+import os
 
 class Package:
     def __init__(self, packageInfo):
@@ -22,8 +22,6 @@ class Package:
                 if "(" in self.packageDependancies[index]:
                     self.packageDependancies[index] = self.packageDependancies[index].split("(")[0]
                 self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace(" ", "").replace("]","")
-
-
 
     def print(self):
         print("packagename: ",self.packageName,"packageDescription: ", self.packageDescription, "packageDependancies: ", self.packageDependancies, "PackagesDependant: ", self.packagesDependant)
@@ -64,12 +62,25 @@ class Package:
         return str
 
 
-file = open('status.real', encoding="utf8")
-read_file = reader(file)
-statusPackages = list(read_file)
+class Util:
+    def __init__(self, path):
+        file = open(path, encoding="utf8")
+        readPackages = reader(file)
+        statusPackages = list(readPackages)
+
+
+
+
+
+
+
+os.mkdir("./Packages")
+
+file = open('status.real',  encoding="utf8")
+readPackages = reader(file)
+statusPackages = list(readPackages)
 
 #Siivotaan vain tarvittavat statusPackages.
-
 siivotut = []
 for row in statusPackages:
     if "Package:" in str(row) or "Description:" in str(row) or "Depends:" in str(row) and not "Pre-Depends:" in str(row):
