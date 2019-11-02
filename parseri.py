@@ -138,6 +138,7 @@ for package in paketit:
         {}
        </ul>
    </div>
+   <div><a href="../index.html">Back to index</a></div>
 
     """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(), package.getDependantHrefs())
     f.write(html)
