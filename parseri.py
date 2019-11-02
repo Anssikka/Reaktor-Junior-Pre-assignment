@@ -32,40 +32,47 @@ class Package:
     def getDependancies(self):
         return self.packageDependancies
 
+    #Use strict equality to find all the packages that are dependant on this one from a list of packages.
     def findDependants(self, allPackages):
         for package in allPackages:
-            if package.getDependancies():
-                for dependancy in package.getDependancies():
-                    if self.packageName == dependancy and dependancy not in self.packagesDependant:
-                        self.packagesDependant.append(dependancy)
+            if package.getDependancies() and self.packageName in package.getDependancies():
+                self.packagesDependant.append(package.packageName)
+
+    def getDependants(self):
+        return self.packagesDependant
 
     def getHref(self):
         return "<li><a href = ""./Packages/{}.html>""{}</a></li>".format(self.packageName, self.packageName)
+
+    def getPackageNameHeader(self):
+        return "<h1>{}</h1>".format(self.packageName)
 
     def getDescriptionHeader(self):
         return "<p>{}</p>".format(self.packageDescription)
 
     def getDependanciesHrefs(self):
-        Str = ''
+        str = ""
         if self.packageDependancies:
             for dep in self.packageDependancies:
-                Str += "<a href = ""./Packages/{}.html>""{}</a> \n" .format(dep, dep)
-        return self.packageDependancies
+                str += "<li><a href = ""./{}.html>""{}</a></li> \n".format(dep, dep)
+        return str
 
+    def getDependantHrefs(self):
+        str = ""
+        if self.packagesDependant:
+            for dep in self.packagesDependant:
+                str += "<li><a href = ""./{}.html>""{}</a></li> \n".format(dep, dep)
+        return str
 
 
 file = open('status.real', encoding="utf8")
 read_file = reader(file)
-rivit = list(read_file)
+statusPackages = list(read_file)
 
-def explore_data(dataset, start, end):
-    for row in dataset:
-        print(row)
-
-#Siivotaan vain tarvittavat rivit.
+#Siivotaan vain tarvittavat statusPackages.
 
 siivotut = []
-for row in rivit:
+for row in statusPackages:
     if "Package:" in str(row) or "Description:" in str(row) or "Depends:" in str(row) and not "Pre-Depends:" in str(row):
         siivotut.append(str(row))
 
@@ -95,11 +102,12 @@ for package in tuplet:
 for p in paketit:
     p.findDependants(paketit)
 
-#printataan
-#paketit = paketit[:15]
-#for pakkake in paketit:
-    #pakkake.print()
 
+paketit
+for pakkake in paketit:
+    if pakkake.getDependants():
+        if len(pakkake.getDependants()) > 0:
+            pakkake.print()
 
 
 f = open("index.html", "w+")
@@ -110,6 +118,30 @@ for package in paketit:
     f.write(package.getHref())
 
 f.write('</ul>')
+f.close()
+
+
+
+for package in paketit:
+    dir = "./Packages/{}.html".format(package.packageName)
+    f = open(dir, "w+")
+    html = """
+    <div>
+       <H1>{}</H1>
+       <h3>{}</h3>
+       <h3>Dependencies:</h3>
+       <ul>
+        {}
+       </ul>
+       <h3>Dependants:</h3>
+       <ul>
+        {}
+       </ul>
+   </div>
+
+    """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(), package.getDependantHrefs())
+    f.write(html)
+
 f.close()
 
 #Generoidaan hakemistot
