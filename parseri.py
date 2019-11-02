@@ -66,91 +66,84 @@ class Util:
     def __init__(self, path):
         file = open(path, encoding="utf8")
         readPackages = reader(file)
-        statusPackages = list(readPackages)
+        statusRows = list(readPackages)
+        #Get only required rows.
+        cleanedRows = []
+        ###
+        filterWords = ["Package:", "Description:", "Depends:"]
+        illegalWord = "Pre-Depends:"
+        ###
+        #print('Statusrows: ', len(statusRows))
+        for row in statusRows:
+            if filterWords[0] in str(row) or filterWords[1] in str(row) or filterWords[2] in str(row) and not illegalWord in str(row):
+                cleanedRows.append(str(row))
 
 
+        #print('Cleanedrows: ', len(cleanedRows))
+        #Make tuples out of the packages for easier processing.
+        tuples = []
+
+        while (len(cleanedRows) > 0):
+            if "Package:" in cleanedRows[0]:
+                tempList = []
+                tempList.append(cleanedRows.pop(0))
+                while (True):
+                    if len(cleanedRows) <= 0:
+                        break
+                    if "Package:" in cleanedRows[0]:
+                        tuples.append(tuple(tempList))
+                        break
+                    else:
+                        tempList.append(cleanedRows.pop(0))
+
+        #print('Tuples: ', len(tuples))
+        #Turn Tuples into Package objects.
+        self.packages = [Package(tupleVar) for tupleVar in tuples]
+
+        #print('Packages:', len(self.packages))
+
+    def generateDependants(self):
+        for package in self.packages:
+            package.getDependants()
+
+    def generateIndex(self):
+        f = open("index.html", "w+")
+        f.write('<ul>')
+        for package in self.packages:
+            f.write(package.getHref())
+        f.write('</ul>')
+        f.close()
+
+    def generatePackagesDir(self):
+        for package in self.packages:
+            dir = "./Packages/{}.html".format(package.packageName)
+            f = open(dir, "w+")
+            html = """
+            <div>
+               <H1>{}</H1>
+               <h3>{}</h3>
+               <h3>Dependencies:</h3>
+               <ul>
+                {}
+               </ul>
+               <h3>Dependants:</h3>
+               <ul>
+                {}
+               </ul>
+           </div>
+           <div><a href="../index.html">Back to index</a></div>
+
+            """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(),
+                       package.getDependantHrefs())
+            f.write(html)
+        f.close()
+
+if not os.path.isdir("./Packages"):
+    os.mkdir("./Packages")
 
 
+utility = Util('status.real')
+utility.generateIndex()
+utility.generateDependants()
+utility.generatePackagesDir()
 
-
-
-os.mkdir("./Packages")
-
-file = open('status.real',  encoding="utf8")
-readPackages = reader(file)
-statusPackages = list(readPackages)
-
-#Siivotaan vain tarvittavat statusPackages.
-siivotut = []
-for row in statusPackages:
-    if "Package:" in str(row) or "Description:" in str(row) or "Depends:" in str(row) and not "Pre-Depends:" in str(row):
-        siivotut.append(str(row))
-
-# Tehdään packageista tuplet
-
-tuplet = []
-while len(siivotut) > 0:
-    if "Package:" in siivotut[0]:
-        tempList = []
-        tempList.append(siivotut.pop(0))
-        while (True):
-            if len(siivotut) <= 0:
-                break
-            if "Package:" in siivotut[0]:
-                tuplet.append(tuple(tempList))
-                break
-            else:
-                tempList.append(siivotut.pop(0))
-
-
-#tehdään packageClassit
-paketit = []
-for package in tuplet:
-    paketit.append(Package(package))
-
-#haetaan dependantit
-for p in paketit:
-    p.findDependants(paketit)
-
-
-paketit
-for pakkake in paketit:
-    if pakkake.getDependants():
-        if len(pakkake.getDependants()) > 0:
-            pakkake.print()
-
-
-f = open("index.html", "w+")
-f.write('<ul>')
-
-#Generoidaan indeksi
-for package in paketit:
-    f.write(package.getHref())
-
-f.write('</ul>')
-f.close()
-
-#Generoidaan hakemistot
-
-for package in paketit:
-    dir = "./Packages/{}.html".format(package.packageName)
-    f = open(dir, "w+")
-    html = """
-    <div>
-       <H1>{}</H1>
-       <h3>{}</h3>
-       <h3>Dependencies:</h3>
-       <ul>
-        {}
-       </ul>
-       <h3>Dependants:</h3>
-       <ul>
-        {}
-       </ul>
-   </div>
-   <div><a href="../index.html">Back to index</a></div>
-
-    """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(), package.getDependantHrefs())
-    f.write(html)
-
-f.close()
