@@ -35,6 +35,7 @@ class Util:
                     else:
                         tempList.append(cleanedRows.pop(0))
 
+
         #print('Tuples: ', len(tuples))
         #Turn Tuples into Package objects.
         self.packages = [Package(tupleVar) for tupleVar in tuples]
@@ -43,15 +44,19 @@ class Util:
 
     def generateDependants(self):
         for package in self.packages:
-            package.getDependants()
+            package.findDependants(self.packages)
+            #print(package.getDependancies())
+
 
     def generateIndex(self):
+        self.packages.sort(key=lambda x: x.packageName)
         f = open("index.html", "w+")
         f.write('<ul>')
         for package in self.packages:
             f.write(package.getHref())
         f.write('</ul>')
         f.close()
+
 
     def generatePackagesDir(self):
         for package in self.packages:
@@ -74,5 +79,6 @@ class Util:
 
             """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(),
                        package.getDependantHrefs())
+            print(package.getDependants())
             f.write(html)
         f.close()
