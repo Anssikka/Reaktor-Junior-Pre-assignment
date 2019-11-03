@@ -3,4 +3,8 @@ Packages/
 *status.txt
 .ipynb_checkpoints
 temp/
-__pycache__
+__pycache__/
+.pytest_cache/
+.idea/
+dependencyTestit*
+

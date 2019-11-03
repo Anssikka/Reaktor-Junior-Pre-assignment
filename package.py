@@ -10,8 +10,6 @@ class Package:
             self.packageName = packageInfo[0].split(": ")[1].split("'")[0]
             self.packageDependancies = packageInfo[1].split(": ")[1]
             ##TODO lines with |
-
-
             self.packageDescription = packageInfo[2].split(": ")[1].split("'")[0]
         self.packagesDependant = []
 
@@ -22,6 +20,15 @@ class Package:
                 if "(" in self.packageDependancies[index]:
                     self.packageDependancies[index] = self.packageDependancies[index].split("(")[0]
                 self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace(" ", "").replace("]","")
+
+
+    def stripDependencies(self):
+        if self.packageDependancies:
+            self.packageDependancies = self.packageDependancies.split(",")
+            for index in range(len(self.packageDependancies)):
+                if "(" in self.packageDependancies[index]:
+                    self.packageDependancies[index] = self.packageDependancies[index].split("(")[0]
+                self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace(" ","").replace("]", "")
 
     def print(self):
         print("Packagename: ",self.packageName,"PackageDescription: ", self.packageDescription, "packageDependancies: ", self.packageDependancies, "PackagesDependant: ", self.packagesDependant)

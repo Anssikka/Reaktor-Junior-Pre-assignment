@@ -7,11 +7,9 @@ class Util:
         readPackages = reader(file)
         statusRows = list(readPackages)
         #Get only required rows.
-        cleanedRows = []
-        ###
         filterWords = ["Package:", "Description:", "Depends:"]
         illegalWord = "Pre-Depends:"
-        ###
+        cleanedRows = []
         #print('Statusrows: ', len(statusRows))
         for row in statusRows:
             if filterWords[0] in str(row) or filterWords[1] in str(row) or filterWords[2] in str(row) and not illegalWord in str(row):
@@ -21,7 +19,6 @@ class Util:
         #print('Cleanedrows: ', len(cleanedRows))
         #Make tuples out of the packages for easier processing.
         tuples = []
-
         while (len(cleanedRows) > 0):
             if "Package:" in cleanedRows[0]:
                 tempList = []
@@ -35,8 +32,6 @@ class Util:
                     else:
                         tempList.append(cleanedRows.pop(0))
 
-
-        #print('Tuples: ', len(tuples))
         #Turn Tuples into Package objects.
         self.packages = [Package(tupleVar) for tupleVar in tuples]
 
@@ -46,6 +41,8 @@ class Util:
         for package in self.packages:
             package.findDependants(self.packages)
 
+    def getPackages(self):
+        return self.packages
 
     def generateIndex(self):
         self.packages.sort(key=lambda x: x.packageName)
