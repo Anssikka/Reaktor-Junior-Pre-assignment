@@ -1,0 +1,16 @@
+
+            body {
+              background-color: #100e17;
+              font-family: 'Open Sans', sans-serif;
+            }
+            
+            ul {
+              color: white;
+              list-style-type: square;
+            }
+            
+            a {
+              color:white;
+              font-size: 125%;
+            }
+        

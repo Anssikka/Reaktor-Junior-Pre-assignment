@@ -50,10 +50,42 @@ class Util:
     def generateIndex(self):
         self.packages.sort(key=lambda x: x.packageName)
         f = open("./build/index.html", "w+")
-        f.write('<ul>')
+        html = """<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                  <link rel="stylesheet" href="styles.css">
+                  <title>Document</title>
+                </head>
+                <body>
+                 <ul>"""
+        f.write(html)
         for package in self.packages:
             f.write(package.getHref())
-        f.write('</ul>')
+        f.write('</ul></body></html>')
+        f.close()
+
+    def generateIndexCss(self):
+        f = open("./build/styles.css", "w+")
+        css = """
+            body {
+              background-color: #100e17;
+              font-family: 'Open Sans', sans-serif;
+            }
+            
+            ul {
+              color: white;
+              list-style-type: square;
+            }
+            
+            a {
+              color:white;
+              font-size: 125%;
+            }
+        """
+        f.write(css)
         f.close()
 
 
@@ -62,21 +94,124 @@ class Util:
             dir = "./build/Packages/{}.html".format(package.packageName)
             f = open(dir, "w+")
             html = """
-            <div>
-               <H1>{}</H1>
-               <h3>{}</h3>
-               <h3>Dependencies:</h3>
-               <ul>
-                {}
-               </ul>
-               <h3>Dependants:</h3>
-               <ul>
-                {}
-               </ul>
-           </div>
-           <div><a href="../index.html">Back to index</a></div>
-
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <link rel="stylesheet" href="styles.css">
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="X-UA-Compatible" content="ie=edge">
+              <title>Document</title>
+            </head>
+            <body>
+            <div class="container">
+              <div class="card">
+                <h2 class="title">{}</h2>
+                <div class="bar">
+                  <div class="description">
+                    <h3>{}</h3>
+                  </div>
+                  <div class=linkToIndex><a href="../index.html">Back to index</a></div>
+                  <div class="emptybar"></div>
+                  <div>
+                    <h3>Dependencies:</h3>
+                    <ul class= dlist>
+                      {}
+                    </ul>
+                    <h3>Dependants:</h3>
+                    <ul>
+                      {}       
+                    </ul>
+                  
+                  </div>
+                </div>
+            </body>
+            </html>
             """.format(package.packageName, package.packageDescription, package.getDependanciesHrefs(),
                        package.getDependantHrefs())
             f.write(html)
+        f.close()
+
+    def generatePackagesCss(self):
+        f = open("./build/Packages/styles.css", "w+")
+        css = """
+            body {
+              background-color: #100e17;
+              font-family: 'Open Sans', sans-serif;
+            }
+            
+            .container {
+              position: relative;
+              height: 100%;
+              width: 600px;
+              top: 60px;
+              left: calc(50%);
+              display: flex;
+            }
+            
+            .card {
+              display: flex;
+              height: 1200px;
+              width: 220px;
+              background-color: #17141d;
+              border-radius: 10px;
+              box-shadow: -1rem 0 3rem #000;
+              transition: 0.4s ease-out;
+              position: relative;
+              left: 0px;
+            }
+            
+            .title {
+              color: white;
+              font-weight: 1500%;
+              position: absolute;
+              left: 20px;
+              top: 15px;
+            }
+            
+            .description {
+              color: white;
+              font-weight: 150;
+              padding-top: 35px;
+            }
+            
+            h3 {
+              color: white;
+              font-weight: 150;
+            }
+            
+            .bar {
+              position: absolute;
+              top: 75px;
+              left: 20px;
+              height: 5px;
+              width: 150px;
+            }
+            
+            .emptybar {
+              background-color: #2e3033;
+              width: 100%;
+              height: 100%;
+            }
+            
+            li {
+              color: white;
+            }
+            
+            .linkToIndex {
+              position: relative;
+              bottom: 5px;
+              left: 30px;
+            }
+            
+            a {
+              color: white;
+              text-align: center;
+            }
+            
+            .dlist {
+              list-style-type: square;
+            }
+        """
+        f.write(css)
         f.close()
