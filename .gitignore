@@ -6,5 +6,5 @@ temp/
 __pycache__/
 .pytest_cache/
 .idea/
-dependencyTestit*
-
+*dependencyTestit
+build/
