@@ -1,4 +1,6 @@
 import os
+import re
+
 from utility import Util
 
 if not os.path.isdir("./build/"):
@@ -11,6 +13,5 @@ utility.generateIndex()
 utility.generateCss()
 utility.generateDependants()
 utility.generatePackagesDir()
-
 
 
