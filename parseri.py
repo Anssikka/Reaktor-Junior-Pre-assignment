@@ -11,3 +11,6 @@ utility.generateIndex()
 utility.generateCss()
 utility.generateDependants()
 utility.generatePackagesDir()
+
+
+print("Succesfully generated files!")
