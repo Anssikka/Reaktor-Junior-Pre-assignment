@@ -1,4 +1,6 @@
-from ..Modules.utility import Utiliti, Package
+import sys
+sys.path.insert(0, '')
+from Modules.utility import Utiliti, Package
 import pytest
 
 utility = Utiliti('./Tests/statustest.real')
