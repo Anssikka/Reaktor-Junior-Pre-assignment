@@ -51,8 +51,7 @@ jobs:
             pytest
       - run:
           name: generate build dir
-            command: |
-            python3 parseri.py
+            command: python3 parseri.py
 
       - store_artifacts:
           path: test-reports
