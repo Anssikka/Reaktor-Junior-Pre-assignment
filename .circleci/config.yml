@@ -49,6 +49,10 @@ jobs:
           command: |
             . venv/bin/activate
             pytest
+      - run:
+          name: generate build dir
+            command: |
+            python3 parseri.py
 
       - store_artifacts:
           path: test-reports
