@@ -1,17 +1,13 @@
 import os
-import re
-
-from utility import Util
+from Modules.utility import Utiliti
 
 if not os.path.isdir("./build/"):
     os.mkdir("./build")
 if not os.path.isdir("./build/Packages/"):
     os.mkdir('./build/Packages')
 
-utility = Util('status.real')
+utility = Utiliti('status.real')
 utility.generateIndex()
 utility.generateCss()
 utility.generateDependants()
 utility.generatePackagesDir()
-
-
