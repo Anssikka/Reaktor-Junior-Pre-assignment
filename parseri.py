@@ -8,9 +8,9 @@ if not os.path.isdir("./build/Packages/"):
 
 utility = Util('status.real')
 utility.generateIndex()
-utility.generateIndexCss()
+utility.generateCss()
 utility.generateDependants()
 utility.generatePackagesDir()
-utility.generatePackagesCss()
+
 
 

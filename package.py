@@ -46,7 +46,7 @@ class Package:
         return self.packagesDependant
 
     def getHref(self):
-        return "<li><a href = ""./Packages/{}.html>""{}</a></li>".format(self.packageName, self.packageName)
+        return "<li><a href = './Packages/{}.html'>{}</a></li> \n".format(self.packageName, self.packageName)
 
     def getPackageNameHeader(self):
         return "<h1>{}</h1>".format(self.packageName)
@@ -58,12 +58,12 @@ class Package:
         str = ""
         if self.packageDependancies:
             for dep in self.packageDependancies:
-                str += "<li><a href = ""./{}.html>""{}</a></li> \n".format(dep, dep)
+                str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
         return str
 
     def getDependantHrefs(self):
         str = ""
         if self.packagesDependant:
             for dep in self.packagesDependant:
-                str += "<li><a href = ""./{}.html>""{}</a></li> \n".format(dep, dep)
+                str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
         return str
