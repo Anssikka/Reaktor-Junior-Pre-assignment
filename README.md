@@ -6,3 +6,6 @@
 
 ### Made with:
 Pure Python that generates html and some css.
+
+
+[![CircleCI](https://circleci.com/gh/Anssikka/Reaktor-Junior-Pre-assignment.svg?style=svg)](https://circleci.com/gh/Anssikka/Reaktor-Junior-Pre-assignment)
