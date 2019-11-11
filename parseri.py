@@ -1,16 +1,17 @@
 import os
-from Modules.utility import Utiliti
+from Modules.parser import Parser
+from Modules.htmlgenerator import HtmlGenerator
 
 if not os.path.isdir("./build/"):
     os.mkdir("./build")
 if not os.path.isdir("./build/Packages/"):
     os.mkdir('./build/Packages')
 
-utility = Utiliti('status.real')
-utility.generateIndex()
-utility.generateCss()
-utility.generateDependants()
-utility.generatePackagesDir()
+parser = Parser('status.real')
+htmlGenerator = HtmlGenerator(parser.getPackages())
+htmlGenerator.generateIndex()
+htmlGenerator.generateCss()
+htmlGenerator.generatePackagesDir()
 
 
 print("Succesfully generated files!")
