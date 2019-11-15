@@ -1,9 +1,29 @@
 import sys
+from Modules.package import Package
 sys.path.insert(0, '')
 
 class HtmlGenerator():
     def __init__(self, packages):
         self.packages = packages
+
+    def generatePackageHref(self, packageName):
+        return "<li><a href = './Packages/{}.html'>{}</a></li> \n".format(packageName, packageName)
+
+    def genereateDependenciesHrefs(self, package):
+        str = ""
+        if package.packageDependancies:
+            for dep in package.packageDependancies:
+                # If there are alternatives make the first one a link, alternatives are appended after it without links.
+                if "|" in dep:
+                    dep = dep.split("|")
+                    dep[0] = dep[0].strip()
+                    str += "<li><a href = './{}.html'>{}</a> | ".format(dep[0], dep[0])
+                    for i in range(1, len(dep)):
+                        str += "{} | ".format(dep[i])
+                    str = str.rstrip(" |")
+                else:
+                    str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
+        return str
 
     def generateIndex(self):
         self.packages.sort(key=lambda x: x.packageName)
@@ -26,7 +46,7 @@ class HtmlGenerator():
       <ul>"""
         f.write(html)
         for package in self.packages:
-            f.write(package.getHref())
+            f.write(self.generatePackageHref(package.packageName))
         f.write('</ul></section></body></html>')
         f.close()
 
@@ -162,7 +182,7 @@ section>h3 {
   </main>
 </body>
 </html>
-            """.format(package.packageName, package.packageName, package.packageDescription, package.getDependanciesHrefs(),
+            """.format(package.packageName, package.packageName, package.packageDescription, self.genereateDependenciesHrefs(package),
                        package.getDependantHrefs())
             f.write(html)
         f.close()

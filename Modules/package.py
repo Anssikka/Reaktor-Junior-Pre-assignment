@@ -56,27 +56,11 @@ class Package:
         for package in allPackages:
             if package.getDependancies():
                 for dependency in package.getDependancies():
-                    # Check if the dependency has alternatives
-                    if "|" in dependency:
-                        # Get the first one since that should have an url in the directory
-                        dependencyWithAlternatives = dependency.split("|")[0].strip()
-                        if self.packageName == dependencyWithAlternatives:
-                            self.packagesDependant.append(package.packageName)
-                    #
-                    elif self.packageName == dependency:
+                    if self.packageName in dependency:
                         self.packagesDependant.append(package.packageName)
 
     def getDependants(self):
         return self.packagesDependant
-
-    def getHref(self):
-        return "<li><a href = './Packages/{}.html'>{}</a></li> \n".format(self.packageName, self.packageName)
-
-    def getPackageNameHeader(self):
-        return "<h1>{}</h1>".format(self.packageName)
-
-    def getDescriptionHeader(self):
-        return "<p>{}</p>".format(self.packageDescription)
 
     def getDependanciesHrefs(self):
         str = ""

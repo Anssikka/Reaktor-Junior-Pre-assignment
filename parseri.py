@@ -13,5 +13,10 @@ htmlGenerator.generateIndex()
 htmlGenerator.generateCss()
 htmlGenerator.generatePackagesDir()
 
+for package in parser.getPackages():
+    if package.getDependancies():
+        for dep in package.getDependancies():
+            if "|" in dep:
+                print(package.packageName)
 
 print("Succesfully generated files!")

@@ -85,8 +85,6 @@ class Parser:
                         tempList.append(cleanedRows.pop(0))
         return tuples
 
-
-
     def generateDependants(self):
         for package in self.packages:
             package.findDependants(self.packages)
