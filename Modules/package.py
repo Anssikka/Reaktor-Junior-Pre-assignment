@@ -4,19 +4,34 @@ sys.path.insert(0, '')
 
 class Package:
     def __init__(self, packageInfo):
-        # packageInfo is always on same format so there are two possible choices.
-        if len(packageInfo) == 2:
-            self.packageName = packageInfo[0].split(": ")[1].split("'")[0]
-            self.packageDescription = packageInfo[1].split(": ")[1].split("'")[0]
-            self.packageDependancies = None
-        else:
-            self.packageName = packageInfo[0].split(": ")[1].split("'")[0]
-            self.packageDependancies = packageInfo[1].split(": ")[1]
-            self.packageDescription = packageInfo[2].split(": ")[1].split("'")[0]
+        self.cleanAndUnpackTuples(packageInfo)
+
+        self.packageName
+        self.packageDescription
+        self.packageDependancies
         self.packagesDependant = []
 
         if self.packageDependancies:
             self.stripDependencies()
+
+    def cleanAndUnpackTuples(self, packageData):
+        # packageInfo should always be 2 or 3 item tuple so there are two possible choices.
+        if len(packageData) == 2:
+            #Clean the string to only have packagename
+            self.packageName = packageData[0].split(": ")[1].split("'")[0]
+            #Clean ' and random double spaces.
+            self.packageDescription = packageData[1].replace("'", "").replace("  ", " ")
+            #2 item tuples have 0 dependencies.
+            self.packageDependancies = None
+        elif len(packageData) == 3:
+            # Clean the string to only have packagename
+            self.packageName = packageData[0].split(": ")[1].split("'")[0]
+            #Remove the Depends: part from the string.
+            self.packageDependancies = packageData[1].split(": ")[1]
+            # Clean ' and random double spaces.
+            self.packageDescription = packageData[2].replace("'", "").replace("  ", " ")
+        else:
+            raise Exception('Parsing failed somewhere.')
 
     def stripDependencies(self):
         if self.packageDependancies:
