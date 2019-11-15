@@ -13,8 +13,5 @@ htmlGenerator.generateIndex()
 htmlGenerator.generateCss()
 htmlGenerator.generatePackagesDir()
 
-for row in parser.getPackages():
-    if "Depends:" in row.packageDescription:
-        print(row.packageName)
 
 print("Succesfully generated files!")

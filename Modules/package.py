@@ -11,6 +11,7 @@ class Package:
         self.packageDependancies
         self.packagesDependant = []
 
+        #clean dependencies if we have them.
         if self.packageDependancies:
             self.stripDependencies()
 
@@ -34,14 +35,16 @@ class Package:
             raise Exception('Parsing failed somewhere.')
 
     def stripDependencies(self):
-        if self.packageDependancies:
+            #Split into a list of dependencies.
             self.packageDependancies = self.packageDependancies.split(",")
             for index in range(len(self.packageDependancies)):
+                # remove version numbers if they exist.
                 if "(" in self.packageDependancies[index]:
-                    # remove version numbers.
                     self.packageDependancies[index] = re.sub(r'\([^)]*\)', '', self.packageDependancies[index])
+                #Clean dependencies in the list.
                 self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace("]", "").strip()
 
+    #for debugging
     def print(self):
         print("Packagename: ", self.packageName, "PackageDescription: ", self.packageDescription, "packageDependancies: ", self.packageDependancies, "PackagesDependant: ", self.packagesDependant)
 
@@ -49,16 +52,18 @@ class Package:
         return self.packageDependancies
 
     def findDependants(self, allPackages):
+        #Loops through all the packages and looks if some package is dependant from this one.
         for package in allPackages:
             if package.getDependancies():
-                for singleDependancy in package.getDependancies():
+                for dependency in package.getDependancies():
                     # Check if the dependency has alternatives
-                    if "|" in singleDependancy:
-                        # Get the first one since that has an url in the directory
-                        dependencyWithAlternatives = singleDependancy.split("|")[0].strip()
+                    if "|" in dependency:
+                        # Get the first one since that should have an url in the directory
+                        dependencyWithAlternatives = dependency.split("|")[0].strip()
                         if self.packageName == dependencyWithAlternatives:
                             self.packagesDependant.append(package.packageName)
-                    elif self.packageName == singleDependancy:
+                    #
+                    elif self.packageName == dependency:
                         self.packagesDependant.append(package.packageName)
 
     def getDependants(self):

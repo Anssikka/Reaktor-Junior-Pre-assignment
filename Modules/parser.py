@@ -5,7 +5,7 @@ sys.path.insert(0, '')
 
 class Parser:
     def __init__(self, path):
-        #read the status.real file
+        #open status.real
         file = open(path, encoding="utf8")
         readPackages = reader(file)
         packagesAsRowList = list(readPackages)
