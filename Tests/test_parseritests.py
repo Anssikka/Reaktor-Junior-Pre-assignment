@@ -22,7 +22,7 @@ class TestParser():
         for package in parser.getPackages():
             if package.getDependants():
                 totalDependants += len(package.getDependants())
-        assert totalDependants == 494
+        assert totalDependants == 808
 
 
 package = Package(("['Package: bsh-gcj']", "['Depends: bsh (= 2.0b4-12build1)', ' libgcj-common (>> 1:4.1.1-13)', ' libc6 (>= 2.2.5)', ' libgcc1 (>= 1:4.1.1)', ' libgcj-bc (>= 4.4.5-1~)']", "['Description: Java scripting environment (BeanShell) Version 2 (native code)']"))
@@ -34,9 +34,6 @@ for p in parser.getPackages():
 class TestPackageTests():
     def test_packageNameIsCorrect(self):
         assert package.packageName == "bsh-gcj"
-
-    def test_packageDescriptionIsCorrect(self):
-        assert str(package.packageDescription) == "Java scripting environment (BeanShell) Version 2 (native code)"
 
     def RightAmountOfDependencies(self):
         assert len(package.getDependancies()) == 5

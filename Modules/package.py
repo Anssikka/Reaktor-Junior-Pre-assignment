@@ -44,9 +44,6 @@ class Package:
                 #Clean dependencies in the list.
                 self.packageDependancies[index] = self.packageDependancies[index].replace("'", "").replace("]", "").strip()
 
-    #for debugging
-    def print(self):
-        print("Packagename: ", self.packageName, "PackageDescription: ", self.packageDescription, "packageDependancies: ", self.packageDependancies, "PackagesDependant: ", self.packagesDependant)
 
     def getDependancies(self):
         return self.packageDependancies
@@ -56,28 +53,8 @@ class Package:
         for package in allPackages:
             if package.getDependancies():
                 for dependency in package.getDependancies():
-                    if self.packageName in dependency:
+                    if self.packageName in dependency and package.packageName not in self.packagesDependant:
                         self.packagesDependant.append(package.packageName)
 
     def getDependants(self):
         return self.packagesDependant
-
-    def getDependanciesHrefs(self):
-        str = ""
-        if self.packageDependancies:
-            for dep in self.packageDependancies:
-                # If there are alternatives make the first one a link, alternatives are appended after it without links.
-                if "|" in dep:
-                    dep = dep.split("|")
-                    dep[0] = dep[0].strip()
-                    str += "<li><a href = './{}.html'>{}</a> | {}</li> \n".format(dep[0], dep[0], dep[1])
-                else:
-                    str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
-        return str
-
-    def getDependantHrefs(self):
-        str = ""
-        if self.packagesDependant:
-            for dep in self.packagesDependant:
-                str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
-        return str

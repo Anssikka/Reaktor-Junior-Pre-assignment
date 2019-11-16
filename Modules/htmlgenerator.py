@@ -20,9 +20,17 @@ class HtmlGenerator():
                     str += "<li><a href = './{}.html'>{}</a> | ".format(dep[0], dep[0])
                     for i in range(1, len(dep)):
                         str += "{} | ".format(dep[i])
+                    #remove trailing |
                     str = str.rstrip(" |")
                 else:
                     str += "<li><a href = './{}.html'>{}</a></li> \n".format(dep, dep)
+        return str
+
+    def generateDependantsHrefs(self, dependants):
+        str = ""
+        if dependants:
+            for dependency in dependants:
+                str += "<li><a href = './{}.html'>{}</a></li> \n".format(dependency, dependency)
         return str
 
     def generateIndex(self):
@@ -183,6 +191,6 @@ section>h3 {
 </body>
 </html>
             """.format(package.packageName, package.packageName, package.packageDescription, self.genereateDependenciesHrefs(package),
-                       package.getDependantHrefs())
+                       self.generateDependantsHrefs(package.getDependants()))
             f.write(html)
         f.close()
