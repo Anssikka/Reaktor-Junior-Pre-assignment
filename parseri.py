@@ -15,8 +15,3 @@ htmlGenerator.generateCss()
 htmlGenerator.generatePackagesDir()
 
 print("Succesfully generated files!")
-
-file = open('./Tests/statustest.real', encoding="utf8")
-readPackages = reader(file)
-packagesAsRowList = list(readPackages)
-

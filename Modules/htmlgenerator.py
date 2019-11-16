@@ -103,6 +103,10 @@ h3 {
   font-weight: 700;
 }
 
+.text-justified {
+  text-align: justified;
+}
+
 .container {
   max-width: 80%;
   display: flex;
@@ -156,7 +160,7 @@ section>h3 {
     def generatePackagesDir(self):
         for package in self.packages:
             dir = "./build/Packages/{}.html".format(package.packageName)
-            f = open(dir, "w+")
+            f = open(dir, "w+", encoding="utf8")
             html = """
 <!DOCTYPE html>
 <html lang="en">
@@ -172,9 +176,10 @@ section>h3 {
   <main class="container horizontal-center">
     <h1 class="text-center">List of Packages</h1>
     <h2 class="text-center">{}</h2>
-    <article class="text-center">{}
-      <br><a href="../index.html">Back to index</a>
+    <article class="text-justified">{}
+      <br>
     </article>
+    <a class="text-center" href="../index.html">Back to index</a>
     <section class="box">
       <h3 class="text-center">Dependencies</h3>
       <ul>
