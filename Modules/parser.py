@@ -6,16 +6,21 @@ sys.path.insert(0, '')
 class Parser:
     def __init__(self, path):
         #open status.real
-        file = open(path, encoding="utf8")
-        readPackages = reader(file)
-        packagesAsRowList = list(readPackages)
+        packagesAsRowList = self.readFile(path)
         # Get only required rows.
         cleanedRows = self.cleanStatusReal(packagesAsRowList)
         # Make tuples out of the packages for easier processing.
         packageTuples = self.makeTuplesFromCleanedRows(cleanedRows)
         # Turn Tuples into Package objects.
-        self.packages = [Package(tupleVar) for tupleVar in packageTuples]
+        self.packages = self.tuplesIntoPackages(packageTuples)
+        # Generate dependands
         self.generateDependants()
+
+    def readFile(self, path):
+        file = open(path, encoding="utf8")
+        readPackages = reader(file)
+        packagesAsRowList = list(readPackages)
+        return packagesAsRowList
 
     def cleanStatusReal(self, unCleanedRows):
         # Remove all unnecessary lines.
@@ -84,6 +89,10 @@ class Parser:
                     else:
                         tempList.append(cleanedRows.pop(0))
         return tuples
+
+    def tuplesIntoPackages(self, packageTuples):
+        packages = [Package(tupleVar) for tupleVar in packageTuples]
+        return packages
 
     def generateDependants(self):
         for package in self.packages:

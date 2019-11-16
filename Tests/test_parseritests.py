@@ -7,9 +7,6 @@ import pytest
 parser = Parser('./Tests/statustest.real')
 
 class TestParser():
-    def test_rightAmountOfPackages(self):
-        assert len(parser.getPackages()) == 382
-
     def test_rightAmountOfTotalDependencies(self):
         totalDependencies = 0
         for package in parser.getPackages():
@@ -24,6 +21,14 @@ class TestParser():
                 totalDependants += len(package.getDependants())
         assert totalDependants == 808
 
+    def test_rightAmountOfTuples(self):
+        packagesList = parser.readFile('./Tests/statustest.real')
+        cleanedRows = parser.cleanStatusReal(packagesList)
+        packageTuples = parser.makeTuplesFromCleanedRows(cleanedRows)
+        assert len(packageTuples) == 382
+
+    def test_rightAmountOfPackages(self):
+        assert len(parser.getPackages()) == 382
 
 package = Package(("['Package: bsh-gcj']", "['Depends: bsh (= 2.0b4-12build1)', ' libgcj-common (>> 1:4.1.1-13)', ' libc6 (>= 2.2.5)', ' libgcc1 (>= 1:4.1.1)', ' libgcj-bc (>= 4.4.5-1~)']", "['Description: Java scripting environment (BeanShell) Version 2 (native code)']"))
 secondPackage = Package
